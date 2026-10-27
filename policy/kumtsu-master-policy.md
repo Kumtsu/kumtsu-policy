@@ -1,6 +1,6 @@
 # นโยบายกลางคุ้มสึ: การทำงานกับ AI สำหรับพนักงานทุกคน (ไฟล์เดียวจบ)
 
-ฉบับที่ 7 · 27 ต.ค. 2569 · เจ้าของนโยบาย: คุณบ๊อบบี้
+ฉบับที่ 8 · 27 ต.ค. 2569 · เจ้าของนโยบาย: คุณบ๊อบบี้
 ฉบับหลักอยู่ที่ Supabase โปรเจกต์ Kumtsu's Project ตาราง `public.runbooks` slug **`kumtsu-master-policy`**
 
 **วิธีใช้:** ส่งเอกสารนี้ฉบับเดียวให้พนักงานหรือห้อง Claude ใหม่ทุกครั้ง ทุกห้องต้องเช็กเลขฉบับจาก slug ข้างบนก่อนเริ่มงานทุกครั้ง ถ้าเลขฉบับเปลี่ยน ให้ทำตามข้อ 11 (รับทราบ ปรับตาม แจ้งผู้ใช้ห้อง และลง logbook)
@@ -156,6 +156,15 @@ AI ทุกตัว ทุกห้อง ไม่ว่าเป็นขอ
 - การเปลี่ยนวิธีทำงานของทีม
 - ทุกเรื่องที่ AI ไม่แน่ใจ
 
+### 4.7 ล็อกบุ๊คกลางรายเดือน: เดือนละ 1 เล่ม (ยืนยันแล้ว 27 ต.ค. 2569)
+คู่มือเต็ม: runbook `kumtsu-monthly-logbook`
+- ops_logbook แบ่งเป็น **เดือนละ 1 เล่ม** ชื่อเล่มใช้ปี พ.ศ. เช่น `2569-11` ข้อมูลยังอยู่ตารางเดียว แต่ **ทุกห้องอ่านจาก view `ops_logbook_current`** (เล่มเดือนนี้ + งานค้างจากเดือนก่อน) ห้ามดึงทั้งตาราง ถ้าต้องดูย้อนหลังให้กรอง `log_date`
+- การเขียนยังลง `public.ops_logbook` เหมือนเดิม และ **ทุกแถวต้องมี tag `room:`** เพื่อให้รายงานปิดเล่มจัดเข้าห้องได้
+- งานค้างยกไปเล่มใหม่เอง (view ใส่ `carried_over = true`) ห้ามสร้างแถวซ้ำ เสร็จเมื่อไหร่ให้แก้แถวเดิม
+- **วันที่ 1 ของทุกเดือน 06:00** งานอัตโนมัติ (หรือห้อง KUMTSU DEV) ปิดเล่มเก่าด้วยรายงานกิจกรรมประจำเดือน (runbook `kumtsu-logbook-<เล่ม>`) ให้รู้ว่าทั้งเดือนทำอะไร ได้ผลอะไร อะไรค้าง และข้อเสนอสำหรับเดือนหน้า แล้วลงประกาศเปิดเล่มใหม่ tag `logbook_open`, `book:<เล่มใหม่>`
+- **ทุกห้องรับทราบ:** งานแรกของเดือนใหม่ ลงแถวรับทราบ 1 แถว tag `logbook_ack`, `book:<เล่ม>`, `room:<ชื่อห้อง>` (ดูข้อ 11.2 ขั้น 7) วันที่ 7 ห้อง KUMTSU DEV ตรวจว่าห้องไหนยังไม่รับทราบ
+- view ที่ใช้สรุป: `ops_logbook_month_summary` (ต่อหมวด) · `ops_logbook_month_by_room` (ต่อห้อง)
+
 ## 5. Standard Skill: สกิลที่พนักงานต้องใช้ (ยืนยันแล้ว 27 ต.ค. 2569)
 
 ### 5.1 กฎ
@@ -236,6 +245,7 @@ AI ทุกตัว ทุกห้อง ไม่ว่าเป็นขอ
 | 5 | 27 ต.ค. 2569 | ตั้งคลังสกิลกลาง GitHub `Kumtsu/kumtsu-skills` (Private) เก็บ 5 สกิลหลัก สกิลภายนอก และสกิลคุ้มสึทุกตัว + ตาราง `public.skill_registry` · ข้อ 5.3 เพิ่มสกิลคุ้มสึที่มีอยู่แล้วตามตำแหน่ง (`kumtsu-sc-*`, `kumtsu-jd-workflow-builder`, `kumtsu-skills-foodstory`, `kumtsu-production-app-skill`) · ข้อ 5.4 เพิ่มที่เก็บและวิธีดึงจาก GitHub · ข้อ 5.5 สร้างหรือแก้สกิลทุกครั้งต้องสำรองเข้า repo นี้ผ่าน PR · **ทุกห้องต้องทำ:** ถ้าห้องเคยสร้างสกิล `kumtsu-*` ที่ยังไม่อยู่ใน repo ให้เปิด PR นำเข้า (หรือลง tag `skill_backup_pending`) และต่อไปสร้างสกิลใหม่ให้สำรองเข้า repo ทุกครั้ง · ผู้สั่ง: คุณบ๊อบบี้ · ops_logbook #119 |
 | 6 | 27 ต.ค. 2569 | เพิ่มข้อ 0 มาตรฐาน AI คุ้มสึ 10 ข้อ (ดึงจากวิธีทำงานของคุณบ๊อบบี้) ให้ AI ทุกตัวทุกห้องทำตามก่อนกฎอื่น เรื่องส่วนตัว เช่น ชื่อที่ให้เรียก ความยาวคำตอบ ให้แต่ละคนตั้งเองในข้อความเริ่มต้นของห้อง · **ทุกห้องต้องทำ:** ใช้ข้อ 0 กับทุกงานตั้งแต่งานถัดไป ถ้าห้องยังไม่ได้ตั้งเรื่องส่วนตัว ให้ถามผู้ใช้ห้องแล้วจำไว้ · ผู้สั่ง: คุณบ๊อบบี้ · ops_logbook #127 |
 | 7 | 27 ต.ค. 2569 | ยืนยันข้อ 3 อำนาจ AI (เอาคำว่าร่างออก) และเพิ่มข้อ 3.1 สิทธิ์ของแผนกบัญชี: โหลดรายงาน สรุปรีพอร์ต และกระทบยอดจาก statement ทำเองได้ บันทึกบัญชีได้แต่ต้องรายงานและตรวจ Dr = Cr ห้ามทำธุรกรรมธนาคารทุกชนิด · ข้อ 1.4 ยกเว้นการลงบัญชีให้แผนกบัญชี · **ทุกห้องต้องทำ:** ใช้ข้อ 3 เป็นกฎจริงตั้งแต่งานถัดไป ห้องของแผนกบัญชีให้ใช้ข้อ 3.1 ด้วย ห้องอื่นยังลงบัญชีไม่ได้ · ผู้สั่ง: คุณบ๊อบบี้ · ops_logbook #136 |
+| 8 | 27 ต.ค. 2569 | เพิ่มข้อ 4.7 ล็อกบุ๊คกลางรายเดือน: เดือนละ 1 เล่ม อ่านผ่าน view `ops_logbook_current` ปิดเล่มด้วยรายงานกิจกรรมประจำเดือนทุกวันที่ 1 · ข้อ 10.3 และ 11.2 ขั้น 7 · **ทุกห้องต้องทำ:** เปลี่ยนคำสั่งอ่าน logbook ของห้องเป็น `ops_logbook_current` ใส่ tag `room:` ทุกแถว และตั้งแต่ 1 พ.ย. 2569 ลงแถวรับทราบเล่มใหม่ทุกต้นเดือน · ผู้สั่ง: คุณบ๊อบบี้ · ops_logbook #143 |
 
 **กติกาการอัปเดต:** ทุกครั้งที่มีนโยบายใหม่ ให้แก้ที่เอกสารนี้ตามขั้นตอนในข้อ 11.1 ห้ามสร้างไฟล์นโยบายแยกอีก
 
@@ -274,7 +284,7 @@ AI ทุกตัว ทุกห้อง ไม่ว่าเป็นขอ
 
 | ฝ่าย / เรื่อง | เอกสารที่ต้องอ่าน (slug) |
 |---|---|
-| ทุกคน | `kumtsu-master-policy` · `kumtsu-index` · `kumtsu-glossary` · `kumtsu-golden-cases` · `kumtsu-gotchas` · `kumtsu-pending-decisions` |
+| ทุกคน | `kumtsu-master-policy` · `kumtsu-monthly-logbook` · `kumtsu-index` · `kumtsu-glossary` · `kumtsu-golden-cases` · `kumtsu-gotchas` · `kumtsu-pending-decisions` |
 | ครัวกลาง / ฝ่ายผลิต | `kumtsu-central-kitchen-manager` · `kumtsu-central-kitchen-jd-workflow` · `kumtsu-production-runbook` · `kumtsu-production-skillbook` · `kumtsu-production-skill-stock` · `kumtsu-production-log` · `kumtsu-production-app-skill` |
 | คลังสินค้า / จัดซื้อ / Supply chain | `kumtsu-supply-chain-log` · `kumtsu-hq-stock-email-flow` · `kumtsu-hq-inventory-report-check` · `kumtsu-branch-gr-vs-to` · `kumtsu-add-inventory-item-staff-runbook` · `kumtsu-monthly-cogs` · `kumtsu-inventory-cogs-log` · `kumtsu-menu-bom-facts` |
 | บัญชี / การเงิน | `kumtsu-acc-log` · `acc-rev-platforms-file` · `acc-trial-balance-load` · `runbook-trcloud-revenue-workflow` · `runbook-ar-rev-cloudkitchen-ingest` · `runbook-pl-by-branch` · `runbook-branch-month-fact` · `runbook-branch-rent-utilities` · `kumtsu-pl-changelog` · `kumtsu-financial-plan` · `kumtsu-financial-plan-log` |
@@ -284,13 +294,13 @@ AI ทุกตัว ทุกห้อง ไม่ว่าเป็นขอ
 | ข้อมูล / ไอที / ERP | `prd-kumtsu-erp` · `runbook-trcloud-blueprint` · `kumtsu-adr-log` · `kumtsu-access-map` · `kumtsu-github-repos` · `skill-*` ทั้งหมด |
 
 **ตารางอื่นที่ต้องรู้**
-- `public.ops_logbook` คือบันทึกงานของทุกห้อง (ข้อ 4)
+- `public.ops_logbook` คือบันทึกงานของทุกห้อง (ข้อ 4) อ่านผ่าน view `ops_logbook_current` เท่านั้น (ข้อ 4.7)
 - `public.skill_files` เก็บไฟล์สกิลตัวเต็ม (ข้อ 5.4)
 
 **คำสั่งช่วยหา**
 - ค้นเอกสารตามคำ: `select slug, title, description from public.runbooks where title ilike '%<คำ>%' or description ilike '%<คำ>%';`
 - อ่านเอกสาร: `select content, version, updated_at from public.runbooks where slug = '<slug>';`
-- ดูงานล่าสุดของฝ่าย: `select log_date, title, status, result from public.ops_logbook where category = '<หมวด>' order by log_date desc limit 20;`
+- ดูงานล่าสุดของฝ่าย: `select log_date, title, status, result from public.ops_logbook_current where category = '<หมวด>' order by log_date desc limit 20;`
 
 ### 10.4 ครบ 1 สัปดาห์: ตรวจว่า AI เรียนรู้งานแล้ว
 - ให้ AI ตอบคำถาม 3 ข้อต่อไปนี้โดยไม่ต้องเปิดเอกสาร:
@@ -319,6 +329,7 @@ AI ทุกตัว ทุกห้อง ไม่ว่าเป็นขอ
 4. บอกผู้ใช้ห้องสั้น ๆ 1–2 บรรทัดก่อนเริ่มงาน เช่น "นโยบายกลางเปลี่ยนเป็นฉบับ 3: ต้องใส่ลิงก์ผลงานทุกครั้ง" พนักงานจะได้รู้ไปพร้อมกัน
 5. ลงแถวรับทราบใน ops_logbook: category `data_system` · title `รับทราบนโยบายกลางฉบับ <N>` · steps = สิ่งที่ห้องปรับ · status `done` · tags `policy_ack`, `policy:v<N>`, `room:<ชื่อห้อง>`, `by:claude` · created_by = ผู้ใช้ห้อง
 6. จำเลขฉบับใหม่ไว้ในความจำของห้อง
+7. เช็กเล่ม logbook: ถ้าเป็นงานแรกของห้องในเดือนใหม่ ให้ดูประกาศ `logbook_open` ล่าสุด แล้วลงแถวรับทราบ category `data_system` · title `รับทราบล็อกบุ๊คเล่ม <เล่ม>` · status `done` · tags `logbook_ack`, `book:<เล่ม>`, `room:<ชื่อห้อง>` · summary บอกงานค้างยกมาของห้อง (ข้อ 4.7)
 
 ### 11.3 คุณบ๊อบบี้ดูว่าห้องไหนรับทราบแล้ว
 ```sql

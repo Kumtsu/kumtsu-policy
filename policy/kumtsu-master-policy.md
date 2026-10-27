@@ -1,6 +1,6 @@
 # นโยบายกลางคุ้มสึ: การทำงานกับ AI สำหรับพนักงานทุกคน (ไฟล์เดียวจบ)
 
-ฉบับที่ 4 · 27 ต.ค. 2569 · เจ้าของนโยบาย: คุณบ๊อบบี้
+ฉบับที่ 5 · 27 ต.ค. 2569 · เจ้าของนโยบาย: คุณบ๊อบบี้
 ฉบับหลักอยู่ที่ Supabase โปรเจกต์ Kumtsu's Project ตาราง `public.runbooks` slug **`kumtsu-master-policy`**
 
 **วิธีใช้:** ส่งเอกสารนี้ฉบับเดียวให้พนักงานหรือห้อง Claude ใหม่ทุกครั้ง ทุกห้องต้องเช็กเลขฉบับจาก slug ข้างบนก่อนเริ่มงานทุกครั้ง ถ้าเลขฉบับเปลี่ยน ให้ทำตามข้อ 11 (รับทราบ ปรับตาม แจ้งผู้ใช้ห้อง และลง logbook)
@@ -143,29 +143,34 @@
 ### 5.3 ระดับ 1: ตามตำแหน่ง
 | ตำแหน่ง | สกิลที่เพิ่ม |
 |---|---|
-| ผู้บริหาร | `skill-grill-me` |
+| ผู้บริหาร | `skill-grill-me` · `kumtsu-jd-workflow-builder` |
 | ข้อมูล/ไอที | ชุด Superpowers ครบ (`skill-using-superpowers`, `skill-executing-plans`, `skill-subagent-driven-development`, `skill-dispatching-parallel-agents`, `skill-systematic-debugging`, `skill-test-driven-development`, `skill-requesting-code-review`, `skill-receiving-code-review`, `skill-using-git-worktrees`, `skill-finishing-a-development-branch`, `skill-writing-skills`, `skill-diagnosing-superpowers`) · `skill-karpathy-guidelines` · `skill-impeccable` · `skill-find-skills` · `skill-claude-mem` (เฉพาะเครื่องที่ใช้ Claude Code ทุกวัน) · `kumtsu-gotchas` |
-| ครัวกลาง/ฝ่ายผลิต | `kumtsu-central-kitchen-manager` · `kumtsu-production-skill-stock` · `kumtsu-production-skillbook` · `kumtsu-supply-chain-log` |
-| คลัง/จัดซื้อ | `kumtsu-add-inventory-item` · `kumtsu-add-inventory-item-staff-runbook` · `kumtsu-supply-chain-log` |
+| ครัวกลาง/ฝ่ายผลิต | `kumtsu-central-kitchen-manager` · `kumtsu-production-skill-stock` · `kumtsu-production-skillbook` · `kumtsu-production-app-skill` · `kumtsu-sc-production` · `kumtsu-sc-qc` · `kumtsu-supply-chain-log` |
+| คลัง/จัดซื้อ | `kumtsu-sc-inventory` · `kumtsu-sc-purchasing` · `kumtsu-sc-logistics` · `kumtsu-add-inventory-item` · `kumtsu-add-inventory-item-staff-runbook` · `kumtsu-supply-chain-log` |
 | บัญชี/การเงิน | `kumtsu-golden-cases` · `runbook-pl-by-branch` · `kumtsu-financial-plan-log` · `kumtsu-glossary` |
 | ยอดขาย/รายงาน | `kumtsu-daily-sales-report` · `kumtsu-golden-cases` |
-| หน้าสาขา/ไอทีเมนู | `kumtsu-delivery-menu` · `kumtsu-glossary` |
+| หน้าสาขา/ไอทีเมนู | `kumtsu-delivery-menu` · `kumtsu-skills-foodstory` · `kumtsu-glossary` |
 | HR | `kumtsu-hr-log` (ข้อมูลเงินเดือนเป็นความลับ ห้ามใช้ claude-mem) |
 
 ### 5.4 ที่เก็บสกิลตัวเต็ม และวิธีดึงไปติดตั้ง
+- **คลังสกิลกลางบน GitHub (ต้นฉบับไฟล์):** repo `Kumtsu/kumtsu-skills` (Private) โฟลเดอร์ `core/` = 5 สกิลหลัก (Superpowers, Impeccable, Claude Mem, Find Skills, Task Observer) · `external/` = สกิลภายนอกอื่นที่อนุมัติแล้ว · `kumtsu/<ฝ่าย>/<slug>/` = สกิลของคุ้มสึ · `catalog.yaml` = ทะเบียนสกิล (ระดับ ตำแหน่ง ที่มา version) · แก้ผ่าน branch + PR เท่านั้น
+- **ทะเบียนสกิลใน Supabase:** `public.skill_registry` 1 แถวต่อ 1 สกิล ตรงกับ `catalog.yaml`
 - **การ์ดสกิลพร้อม SKILL.md ตัวเต็ม:** อยู่ที่ `public.runbooks` slug `skill-*`
 - **ไฟล์ทุกไฟล์ของสกิล:** อยู่ที่ `public.skill_files` มี 161 ไฟล์ ทุกไฟล์ pin commit ไว้ และ `verified = true` หมายถึง sha256 ตรงกับต้นฉบับบน GitHub
 - **วิธีดึงไปติดตั้ง:**
   1. รัน `select path, content from public.skill_files where skill_slug = '<slug>' order by path;`
   2. เขียนแต่ละไฟล์ลง `~/.claude/skills/<ชื่อสกิล>/<path>` หรือ zip แล้วอัปโหลดที่ claude.ai → Settings → Customize → Skills
-- **อัปเดตเวอร์ชัน:** ดึง commit ใหม่ → ตรวจ sha256 → เพิ่ม version ในการ์ด ห้ามแก้ไฟล์ใน skill_files ด้วยมือ
+- **วิธีดึงจาก GitHub:** คัดลอกโฟลเดอร์สกิลจาก `Kumtsu/kumtsu-skills` ไป `~/.claude/skills/<ชื่อสกิล>/` หรือ zip โฟลเดอร์แล้วอัปโหลดที่ claude.ai
+- **อัปเดตเวอร์ชัน:** ดึง commit ใหม่ → ตรวจ sha256 → เปิด PR เข้า `Kumtsu/kumtsu-skills` → merge แล้ว sync `skill_files` + `skill_registry` + เพิ่ม version ในการ์ด ห้ามแก้ไฟล์ใน skill_files ด้วยมือ
 - **ดูแลประจำ:** ทุกสัปดาห์ คุณบ๊อบบี้อ่านร่างที่ task-observer ทำไว้แล้วอนุมัติ และทุกเดือนให้เช็คว่าสกิลจากภายนอกมีเวอร์ชันใหม่หรือไม่
 
 ### 5.5 สร้างสกิลของงานตัวเอง (ทุกคนต้องทำ)
 1. งานไหนทำซ้ำครบ 3 ครั้ง ให้ AI ของห้องสร้างเป็นสกิล ตั้งชื่อ `kumtsu-<งาน>` โดยรวบรวมขั้นตอนจาก logbook ของงานนั้น
 2. สร้างและใช้งานได้เลย ไม่ต้องรออนุมัติ แต่ต้องรายงานทุกครั้ง: บอกผู้ใช้ห้องว่าสร้างสกิลอะไร ใช้ทำอะไร และลง ops_logbook ตามขั้นที่ 4 ด้านล่าง คุณบ๊อบบี้จะเห็นในสรุปรายสัปดาห์ (ข้อนี้ใช้กับสกิล `kumtsu-*` ของเราเอง ส่วนสกิลจากภายนอกยังต้องขออนุมัติตามข้อ 5.1)
-3. สร้างแล้วให้เก็บเข้าฐานกลาง: การ์ดสกิลใน `public.runbooks` และไฟล์ทุกไฟล์ใน `public.skill_files` แล้วเพิ่มชื่อสกิลในตารางข้อ 5.3 ตามตำแหน่ง ลงครบทุกที่ตามกฎเหล็กข้อ 1
-4. ทุกครั้งที่สร้างหรือแก้สกิล ให้ลง ops_logbook หมวด `it` · tag `skill`, `room:<ชื่อห้อง>`, `by:<ผู้ทำ>` ถ้าแก้สกิลเดิมให้เพิ่ม version
+3. สร้างแล้วให้เก็บเข้าฐานกลาง: การ์ดสกิลใน `public.runbooks` ไฟล์ทุกไฟล์ใน `public.skill_files` แถวใน `public.skill_registry` แล้วเพิ่มชื่อสกิลในตารางข้อ 5.3 ตามตำแหน่ง ลงครบทุกที่ตามกฎเหล็กข้อ 1
+   - **ต้องสำรองเข้า GitHub ด้วยทุกครั้ง:** เปิด PR เข้า repo `Kumtsu/kumtsu-skills` วางไฟล์ที่ `kumtsu/<ฝ่าย>/kumtsu-<งาน>/` และเพิ่มแถวใน `catalog.yaml` (ทำตาม README ของ repo) สกิลที่ยังไม่อยู่ใน repo ถือว่ายังสร้างไม่เสร็จ
+   - ถ้าห้องไม่มีสิทธิ์ GitHub ให้ลง ops_logbook tag `skill_backup_pending` แล้วแจ้งคุณบ๊อบบี้หรือไอทีให้นำเข้า repo แทน
+4. ทุกครั้งที่สร้างหรือแก้สกิล ให้ลง ops_logbook หมวด `it` · tag `skill`, `room:<ชื่อห้อง>`, `by:<ผู้ทำ>` ใส่ลิงก์ PR ใน data_sources ถ้าแก้สกิลเดิมให้เพิ่ม version
 
 ## 6. ข้อห้ามรวม (เพราะทุกคนใช้บัญชีเดียวกันที่มีสิทธิ์เต็ม)
 - ห้ามใส่รหัสผ่าน คีย์ หรือโทเคนลงตารางหรือเอกสาร
@@ -193,6 +198,7 @@
 | 2 | 27 ต.ค. 2569 | เพิ่มข้อ 11 วิธีประกาศและรับทราบเมื่อนโยบายเปลี่ยน · เลขฉบับเปลี่ยนเป็นจำนวนเต็มให้ตรงกับคอลัมน์ `version` ใน Supabase · **ทุกห้องต้องทำ:** จำเลขฉบับที่อ่านล่าสุดไว้ในความจำของห้อง เช็กทุกครั้งก่อนเริ่มงาน และลงแถวรับทราบตามข้อ 11.2 · ผู้สั่ง: คุณบ๊อบบี้ · ops_logbook #107 |
 | 3 | 27 ต.ค. 2569 | ยืนยันข้อ 5 Standard Skill (เอาคำว่าร่างออก) ข้อ 3 อำนาจ AI ยังเป็นร่าง · **ทุกห้องต้องทำ:** ติดตั้งสกิลระดับ 0 และระดับ 1 ตามตำแหน่งให้ครบตามข้อ 5.2–5.4 ถ้ายังไม่ครบ แล้วลง ops_logbook หมวด `it` ว่าติดตั้งอะไร · ผู้สั่ง: คุณบ๊อบบี้ · ops_logbook #114 |
 | 4 | 27 ต.ค. 2569 | เพิ่มข้อ 5.5 ให้ทุกคนสร้างสกิลของงานตัวเองเมื่องานทำซ้ำครบ 3 ครั้ง สร้างได้เลยไม่ต้องรออนุมัติ แต่ต้องรายงานใน ops_logbook แล้วเก็บเข้าฐานกลาง · **ทุกห้องต้องทำ:** ดู logbook ของห้องว่ามีงานไหนทำซ้ำครบ 3 ครั้งแล้ว ให้สร้างเป็นสกิลตามข้อ 5.5 · ผู้สั่ง: คุณบ๊อบบี้ · ops_logbook #115 |
+| 5 | 27 ต.ค. 2569 | ตั้งคลังสกิลกลาง GitHub `Kumtsu/kumtsu-skills` (Private) เก็บ 5 สกิลหลัก สกิลภายนอก และสกิลคุ้มสึทุกตัว + ตาราง `public.skill_registry` · ข้อ 5.3 เพิ่มสกิลคุ้มสึที่มีอยู่แล้วตามตำแหน่ง (`kumtsu-sc-*`, `kumtsu-jd-workflow-builder`, `kumtsu-skills-foodstory`, `kumtsu-production-app-skill`) · ข้อ 5.4 เพิ่มที่เก็บและวิธีดึงจาก GitHub · ข้อ 5.5 สร้างหรือแก้สกิลทุกครั้งต้องสำรองเข้า repo นี้ผ่าน PR · **ทุกห้องต้องทำ:** ถ้าห้องเคยสร้างสกิล `kumtsu-*` ที่ยังไม่อยู่ใน repo ให้เปิด PR นำเข้า (หรือลง tag `skill_backup_pending`) และต่อไปสร้างสกิลใหม่ให้สำรองเข้า repo ทุกครั้ง · ผู้สั่ง: คุณบ๊อบบี้ · ops_logbook #119 |
 
 **กติกาการอัปเดต:** ทุกครั้งที่มีนโยบายใหม่ ให้แก้ที่เอกสารนี้ตามขั้นตอนในข้อ 11.1 ห้ามสร้างไฟล์นโยบายแยกอีก
 

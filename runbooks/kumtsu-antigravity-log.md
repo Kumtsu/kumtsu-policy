@@ -66,3 +66,12 @@ Logbook อย่างเป็นทางการของห้อง **ANT
 - **ทางเลือกปิดช่องว่าง Dashboard ถาวร (รอคุณบ๊อบบี้ตัดสินใจ):**
   - เฉพาะหน้า: เปิด `exec.html` ในเครื่องหรือให้ห้อง `KUMTSU OPERATIONS` ช่วย publish ลิงก์ Artifact เดิม
   - ระยะยาว: ย้ายหน้าอ่านเร็ว `exec.html` มาโฮสต์บนระบบของคุ้มสึเองที่อัปเดตผ่าน Git หรือ CLI ได้ทุกห้อง (เช่น ส่วนสาธารณะในโปรเจกต์ `kumtsu-sales-dashboard` โดยไม่แตะ `Kumtsu-Website`) เพื่อให้ทุกห้องอัปเดตหน้าเดียวกันได้จบในตัว · ops_logbook #408
+
+### 12 พ.ย. 2569 (สาย) — แพคสกิล Chrome DevTools MCP 2 ตัวลง Supabase และ GitHub
+- แพคสกิล Chrome DevTools MCP แยก 2 ตัวตามโครงสร้าง `Kumtsu/kumtsu-skills` (คู่ขนานกับ `kumtsu-chrome-data-pull` ฝั่ง Control Chrome ใน PR #6 โดยไม่แตะ PR #6):
+  1. **`skill-chrome-devtools`** (`external/chrome-devtools/`, `skill_group: external`, ระดับ 1: `ข้อมูล/ไอที`) — ต้นฉบับจาก Antigravity `chrome-devtools-plugin` v1.10.1 (`ChromeDevTools/chrome-devtools-mcp`, Apache-2.0) ครบ 13 ไฟล์ (`SKILL.md`, `plugin.json` และ 5 สกิลย่อย: `troubleshooting`, `cookie-debugging`, `a11y-debugging`, `debug-optimize-lcp`, `memory-leak-debugging`)
+  2. **`kumtsu-chrome-devtools`** (`kumtsu/it/kumtsu-chrome-devtools/SKILL.md`, `skill_group: kumtsu`, ระดับ 1: `ข้อมูล/ไอที`, `ยอดขาย/รายงาน`) — สกิลใช้งานในคุ้มสึ (`--autoConnect` `127.0.0.1:9222`, กฎความปลอดภัยฉบับ 14–15, สูตร FoodStory DataTables `page.len(5000)` / `jQuery.ajax('/api/setDate')`, sandbox boundary `~/Downloads -> scratch/`, CLI top-level rule, Google Sheets PDF UI)
+- บันทึกครบ 3 ปลายทาง:
+  - **GitHub `Kumtsu/kumtsu-skills`:** branch `antigravity/chrome-devtools-skill-2026-11-12` (commit `e211673c59a7074af4b99977f81cb8b171c380ef`), อัปเดต `catalog.yaml` และ `MANIFEST.sha256` (216 ไฟล์ · `verify.sh` ผ่าน) พร้อมเปิด PR `https://github.com/Kumtsu/kumtsu-skills/pull/new/antigravity/chrome-devtools-skill-2026-11-12`
+  - **Supabase (`cokrtednhnunuyvksfhv`):** `public.runbooks` (`skill-chrome-devtools`, `kumtsu-chrome-devtools` v1), `public.skill_registry` (2 แถว `approved`) และ `public.skill_files` (14 แถว ครบ `sha256` + `byte_size` ตรงทุกไฟล์)
+  - **ในเครื่อง (พร้อมอัปโหลดเข้า Claude/Antigravity):** โฟลเดอร์ `/Users/bobby/All Ai/antigravity/skills/chrome-devtools/` + `kumtsu-chrome-devtools/` และไฟล์ `.zip` (`skill-chrome-devtools.zip`, `kumtsu-chrome-devtools.zip`) · รอคุณบ๊อบบี้ merge PR และเติมตารางนโยบายข้อ 5.3 · ops_logbook #415
